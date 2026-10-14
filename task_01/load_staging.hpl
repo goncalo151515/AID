@@ -52,6 +52,51 @@
     </hop>
   </order>
   <transform>
+    <name>Read Events (raw lines)</name>
+    <type>CSVInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <filename>${PROJECT_HOME}/data/historical_events.csv</filename>
+    <filename_field/>
+    <rownum_field/>
+    <include_filename>N</include_filename>
+    <separator>|</separator>
+    <enclosure/>
+    <header>Y</header>
+    <buffer_size>50000</buffer_size>
+    <schemaDefinition/>
+    <ignoreFields>N</ignoreFields>
+    <lazy_conversion>N</lazy_conversion>
+    <add_filename_result>N</add_filename_result>
+    <parallel>N</parallel>
+    <newline_possible>N</newline_possible>
+    <encoding>UTF-8</encoding>
+    <fields>
+      <field>
+        <name>line</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>,</decimal>
+        <group> </group>
+        <length>1000</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+    </fields>
+    <attributes/>
+    <GUI>
+      <xloc>224</xloc>
+      <yloc>464</yloc>
+    </GUI>
+  </transform>
+  <transform>
     <name>Read Maddison</name>
     <type>CSVInput</type>
     <description/>
@@ -152,73 +197,7 @@
     </GUI>
   </transform>
   <transform>
-    <name>Write stg_maddison</name>
-    <type>TableOutput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <add_columns>N</add_columns>
-    <always_drop_and_recreate>N</always_drop_and_recreate>
-    <auto_update_table_structure>N</auto_update_table_structure>
-    <change_column_types>N</change_column_types>
-    <commit>1000</commit>
-    <connection>aid_staging</connection>
-    <drop_columns>N</drop_columns>
-    <fields>
-      <field>
-        <column_name>country_iso3</column_name>
-        <stream_name>country_iso3</stream_name>
-      </field>
-      <field>
-        <column_name>country_name</column_name>
-        <stream_name>country_name</stream_name>
-      </field>
-      <field>
-        <column_name>indicator_code</column_name>
-        <stream_name>indicator_code</stream_name>
-      </field>
-      <field>
-        <column_name>indicator_name</column_name>
-        <stream_name>indicator_name</stream_name>
-      </field>
-      <field>
-        <column_name>year</column_name>
-        <stream_name>year</stream_name>
-      </field>
-      <field>
-        <column_name>value</column_name>
-        <stream_name>value</stream_name>
-      </field>
-    </fields>
-    <ignore_errors>N</ignore_errors>
-    <only_when_have_rows>N</only_when_have_rows>
-    <partitioning_daily>N</partitioning_daily>
-    <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
-    <partitioning_monthly>Y</partitioning_monthly>
-    <return_field/>
-    <return_keys>N</return_keys>
-    <schema>aid_staging</schema>
-    <specify_fields>Y</specify_fields>
-    <table>stg_maddison</table>
-    <tablename_field/>
-    <tablename_in_field>N</tablename_in_field>
-    <tablename_in_table>Y</tablename_in_table>
-    <truncate>Y</truncate>
-    <use_batch>Y</use_batch>
-    <attributes/>
-    <GUI>
-      <xloc>368</xloc>
-      <yloc>352</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Read Events (raw lines)</name>
+    <name>Read WDI</name>
     <type>CSVInput</type>
     <description/>
     <distribute>Y</distribute>
@@ -228,12 +207,12 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <filename>${PROJECT_HOME}/data/historical_events.csv</filename>
+    <filename>${PROJECT_HOME}/data/wdi_indicators.csv</filename>
     <filename_field/>
     <rownum_field/>
     <include_filename>N</include_filename>
-    <separator>|</separator>
-    <enclosure/>
+    <separator>,</separator>
+    <enclosure>"</enclosure>
     <header>Y</header>
     <buffer_size>50000</buffer_size>
     <schemaDefinition/>
@@ -245,13 +224,68 @@
     <encoding>UTF-8</encoding>
     <fields>
       <field>
-        <name>line</name>
+        <name>country_iso3</name>
         <type>String</type>
         <format/>
         <currency>$</currency>
         <decimal>,</decimal>
         <group> </group>
-        <length>1000</length>
+        <length>3</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>country_name</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>,</decimal>
+        <group> </group>
+        <length>100</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>indicator_code</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>,</decimal>
+        <group> </group>
+        <length>30</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>indicator_name</name>
+        <type>String</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>,</decimal>
+        <group> </group>
+        <length>200</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>year</name>
+        <type>Integer</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>,</decimal>
+        <group> </group>
+        <length>-1</length>
+        <precision>-1</precision>
+        <trim_type>none</trim_type>
+      </field>
+      <field>
+        <name>value</name>
+        <type>BigNumber</type>
+        <format/>
+        <currency>$</currency>
+        <decimal>.</decimal>
+        <group/>
+        <length>-1</length>
         <precision>-1</precision>
         <trim_type>none</trim_type>
       </field>
@@ -259,7 +293,24 @@
     <attributes/>
     <GUI>
       <xloc>224</xloc>
-      <yloc>464</yloc>
+      <yloc>576</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Rejected lines</name>
+    <type>Dummy</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <attributes/>
+    <GUI>
+      <xloc>656</xloc>
+      <yloc>528</yloc>
     </GUI>
   </transform>
   <transform>
@@ -368,7 +419,7 @@
     </fields>
     <attributes/>
     <GUI>
-      <xloc>384</xloc>
+      <xloc>368</xloc>
       <yloc>464</yloc>
     </GUI>
   </transform>
@@ -394,7 +445,6 @@
         <value>
           <isnull>N</isnull>
           <length>-1</length>
-          <mask/>
           <name>constant</name>
           <precision>-1</precision>
           <text>Y</text>
@@ -406,7 +456,7 @@
     <send_true_to>Write stg_events</send_true_to>
     <attributes/>
     <GUI>
-      <xloc>512</xloc>
+      <xloc>480</xloc>
       <yloc>464</yloc>
     </GUI>
   </transform>
@@ -458,27 +508,24 @@
     <only_when_have_rows>N</only_when_have_rows>
     <partitioning_daily>N</partitioning_daily>
     <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
     <partitioning_monthly>Y</partitioning_monthly>
-    <return_field/>
     <return_keys>N</return_keys>
     <schema>aid_staging</schema>
     <specify_fields>Y</specify_fields>
     <table>stg_events</table>
-    <tablename_field/>
     <tablename_in_field>N</tablename_in_field>
     <tablename_in_table>Y</tablename_in_table>
     <truncate>Y</truncate>
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>624</xloc>
-      <yloc>416</yloc>
+      <xloc>656</xloc>
+      <yloc>400</yloc>
     </GUI>
   </transform>
   <transform>
-    <name>Rejected lines</name>
-    <type>Dummy</type>
+    <name>Write stg_maddison</name>
+    <type>TableOutput</type>
     <description/>
     <distribute>Y</distribute>
     <custom_distribution/>
@@ -487,110 +534,56 @@
       <method>none</method>
       <schema_name/>
     </partitioning>
-    <attributes/>
-    <GUI>
-      <xloc>624</xloc>
-      <yloc>544</yloc>
-    </GUI>
-  </transform>
-  <transform>
-    <name>Read WDI</name>
-    <type>CSVInput</type>
-    <description/>
-    <distribute>Y</distribute>
-    <custom_distribution/>
-    <copies>1</copies>
-    <partitioning>
-      <method>none</method>
-      <schema_name/>
-    </partitioning>
-    <filename>${PROJECT_HOME}/data/wdi_indicators.csv</filename>
-    <filename_field/>
-    <rownum_field/>
-    <include_filename>N</include_filename>
-    <separator>,</separator>
-    <enclosure>"</enclosure>
-    <header>Y</header>
-    <buffer_size>50000</buffer_size>
-    <schemaDefinition/>
-    <ignoreFields>N</ignoreFields>
-    <lazy_conversion>N</lazy_conversion>
-    <add_filename_result>N</add_filename_result>
-    <parallel>N</parallel>
-    <newline_possible>N</newline_possible>
-    <encoding>UTF-8</encoding>
+    <add_columns>N</add_columns>
+    <always_drop_and_recreate>N</always_drop_and_recreate>
+    <auto_update_table_structure>N</auto_update_table_structure>
+    <change_column_types>N</change_column_types>
+    <commit>1000</commit>
+    <connection>aid_staging</connection>
+    <drop_columns>N</drop_columns>
     <fields>
       <field>
-        <name>country_iso3</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>,</decimal>
-        <group> </group>
-        <length>3</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <column_name>country_iso3</column_name>
+        <stream_name>country_iso3</stream_name>
       </field>
       <field>
-        <name>country_name</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>,</decimal>
-        <group> </group>
-        <length>100</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <column_name>country_name</column_name>
+        <stream_name>country_name</stream_name>
       </field>
       <field>
-        <name>indicator_code</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>,</decimal>
-        <group> </group>
-        <length>30</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <column_name>indicator_code</column_name>
+        <stream_name>indicator_code</stream_name>
       </field>
       <field>
-        <name>indicator_name</name>
-        <type>String</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>,</decimal>
-        <group> </group>
-        <length>200</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <column_name>indicator_name</column_name>
+        <stream_name>indicator_name</stream_name>
       </field>
       <field>
-        <name>year</name>
-        <type>Integer</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>,</decimal>
-        <group> </group>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <column_name>year</column_name>
+        <stream_name>year</stream_name>
       </field>
       <field>
-        <name>value</name>
-        <type>BigNumber</type>
-        <format/>
-        <currency>$</currency>
-        <decimal>.</decimal>
-        <group/>
-        <length>-1</length>
-        <precision>-1</precision>
-        <trim_type>none</trim_type>
+        <column_name>value</column_name>
+        <stream_name>value</stream_name>
       </field>
     </fields>
+    <ignore_errors>N</ignore_errors>
+    <only_when_have_rows>N</only_when_have_rows>
+    <partitioning_daily>N</partitioning_daily>
+    <partitioning_enabled>N</partitioning_enabled>
+    <partitioning_monthly>Y</partitioning_monthly>
+    <return_keys>N</return_keys>
+    <schema>aid_staging</schema>
+    <specify_fields>Y</specify_fields>
+    <table>stg_maddison</table>
+    <tablename_in_field>N</tablename_in_field>
+    <tablename_in_table>Y</tablename_in_table>
+    <truncate>Y</truncate>
+    <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>224</xloc>
-      <yloc>624</yloc>
+      <xloc>352</xloc>
+      <yloc>352</yloc>
     </GUI>
   </transform>
   <transform>
@@ -641,22 +634,19 @@
     <only_when_have_rows>N</only_when_have_rows>
     <partitioning_daily>N</partitioning_daily>
     <partitioning_enabled>N</partitioning_enabled>
-    <partitioning_field/>
     <partitioning_monthly>Y</partitioning_monthly>
-    <return_field/>
     <return_keys>N</return_keys>
     <schema>aid_staging</schema>
     <specify_fields>Y</specify_fields>
     <table>stg_wdi</table>
-    <tablename_field/>
     <tablename_in_field>N</tablename_in_field>
     <tablename_in_table>Y</tablename_in_table>
     <truncate>Y</truncate>
     <use_batch>Y</use_batch>
     <attributes/>
     <GUI>
-      <xloc>368</xloc>
-      <yloc>624</yloc>
+      <xloc>320</xloc>
+      <yloc>576</yloc>
     </GUI>
   </transform>
   <transform_error_handling>
