@@ -42,3 +42,14 @@ CREATE TABLE stg_events (
 
   PRIMARY KEY (event_id)
 ) ENGINE = InnoDB;
+
+
+-- for task 2
+CREATE TABLE stg_country_mapping (
+
+  iso3_code       CHAR(3)        NOT NULL,
+  country_name    VARCHAR(100)   NOT NULL,
+  country_group   VARCHAR(30)    NOT NULL,
+
+  PRIMARY KEY (iso3_code)
+) ENGINE = InnoDB;
