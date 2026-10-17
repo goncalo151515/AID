@@ -48,7 +48,7 @@ CREATE TABLE FACT_ECONOMY (
   exports_pct_gdp DECIMAL(14,6)     NULL,
   imports_pct_gdp DECIMAL(14,6)     NULL,
   PRIMARY KEY (country_key, time_key),
-  KEY idx_fact_economy_time (time_key), -- what is this?
+  KEY idx_fact_economy_time (time_key),
   CONSTRAINT fk_economy_country FOREIGN KEY (country_key)
     REFERENCES DIM_COUNTRY (country_key),
   CONSTRAINT fk_economy_time FOREIGN KEY (time_key)
@@ -63,7 +63,7 @@ CREATE TABLE FACT_SOCIETY (
   life_expectancy DECIMAL(12,6)    NULL,
   urban_pop_pct  DECIMAL(14,6)     NULL,
   PRIMARY KEY (country_key, time_key),
-  KEY idx_fact_society_time (time_key), -- what is this?
+  KEY idx_fact_society_time (time_key),
   CONSTRAINT fk_society_country FOREIGN KEY (country_key)
     REFERENCES DIM_COUNTRY (country_key),
   CONSTRAINT fk_society_time FOREIGN KEY (time_key)
@@ -78,7 +78,7 @@ CREATE TABLE FACT_SECTOR (
   value_added_usd    DECIMAL(24,6)     NULL,
   employment_pct     DECIMAL(14,6)     NULL,
   PRIMARY KEY (country_key, time_key, sector_key),
-  KEY idx_fact_sector_time (time_key), -- what are these?
+  KEY idx_fact_sector_time (time_key),
   KEY idx_fact_sector_sector (sector_key),
   CONSTRAINT fk_sector_country FOREIGN KEY (country_key)
     REFERENCES DIM_COUNTRY (country_key),
