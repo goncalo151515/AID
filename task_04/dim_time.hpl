@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <name>dim_time</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description/>
+    <extended_description/>
+    <pipeline_version/>
+    <pipeline_type>Normal</pipeline_type>
+    <parameters>
+    </parameters>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <created_user>-</created_user>
+    <created_date>2026/10/17 18:22:21.907</created_date>
+    <modified_user>-</modified_user>
+    <modified_date>2026/10/17 18:22:21.907</modified_date>
+  </info>
+  <notepads>
+  </notepads>
+  <order>
+    <hop>
+      <from>Year range</from>
+      <to>One row per year</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>One row per year</from>
+      <to>Year and decade</to>
+      <enabled>Y</enabled>
+    </hop>
+    <hop>
+      <from>Year and decade</from>
+      <to>Load DIM_TIME</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <transform>
+    <name>Load DIM_TIME</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <commit>100</commit>
+    <connection>aid_dw</connection>
+    <lookup>
+      <key>
+        <condition>=</condition>
+        <field>year</field>
+        <name>year</name>
+      </key>
+      <schema>aid_dw</schema>
+      <table>DIM_TIME</table>
+      <value>
+        <name>year</name>
+        <rename>year</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>decade</name>
+        <rename>decade</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <update_bypassed>N</update_bypassed>
+    <attributes/>
+    <GUI>
+      <xloc>704</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>One row per year</name>
+    <type>CloneRow</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <addcloneflag>N</addcloneflag>
+    <addclonenum>Y</addclonenum>
+    <clonenumfield>offset</clonenumfield>
+    <nrclonefield>nr_clones</nrclonefield>
+    <nrcloneinfield>Y</nrcloneinfield>
+    <nrclones>0</nrclones>
+    <attributes/>
+    <GUI>
+      <xloc>416</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Year and decade</name>
+    <type>Calculator</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <calculation>
+      <calc_type>ADD</calc_type>
+      <field_a>start_year</field_a>
+      <field_b>offset</field_b>
+      <field_name>year</field_name>
+      <remove>N</remove>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <value_type>Integer</value_type>
+    </calculation>
+    <calculation>
+      <calc_type>REMAINDER</calc_type>
+      <field_a>year</field_a>
+      <field_b>ten</field_b>
+      <field_name>remainder</field_name>
+      <remove>Y</remove>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <value_type>Integer</value_type>
+    </calculation>
+    <calculation>
+      <calc_type>SUBTRACT</calc_type>
+      <field_a>year</field_a>
+      <field_b>remainder</field_b>
+      <field_name>decade</field_name>
+      <remove>N</remove>
+      <value_length>-1</value_length>
+      <value_precision>-1</value_precision>
+      <value_type>Integer</value_type>
+    </calculation>
+    <failIfNoFile>Y</failIfNoFile>
+    <attributes/>
+    <GUI>
+      <xloc>560</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Year range</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>aid_staging</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>SELECT MIN(first_year) AS start_year,
+  MAX(last_year) AS end_year,
+  MAX(last_year) - MIN(first_year) AS nr_clones,
+  10 AS ten
+FROM (
+  SELECT MIN(year) AS first_year, MAX(year) AS last_year FROM stg_maddison
+  UNION ALL
+  SELECT MIN(year), MAX(year) FROM stg_wdi
+  UNION ALL
+  SELECT MIN(year), MAX(year) FROM stg_events
+) AS t</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>256</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform_error_handling>
+  </transform_error_handling>
+  <attributes/>
+</pipeline>

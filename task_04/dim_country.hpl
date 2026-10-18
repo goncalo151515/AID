@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<pipeline>
+  <info>
+    <name>dim_country</name>
+    <name_sync_with_filename>Y</name_sync_with_filename>
+    <description/>
+    <extended_description/>
+    <pipeline_version/>
+    <pipeline_type>Normal</pipeline_type>
+    <parameters>
+    </parameters>
+    <capture_transform_performance>N</capture_transform_performance>
+    <transform_performance_capturing_delay>1000</transform_performance_capturing_delay>
+    <transform_performance_capturing_size_limit>100</transform_performance_capturing_size_limit>
+    <created_user>-</created_user>
+    <created_date>2026/10/17 18:10:42.427</created_date>
+    <modified_user>-</modified_user>
+    <modified_date>2026/10/17 18:10:42.427</modified_date>
+  </info>
+  <notepads>
+  </notepads>
+  <order>
+    <hop>
+      <from>Read country mapping</from>
+      <to>Load DIM_COUNTRY</to>
+      <enabled>Y</enabled>
+    </hop>
+  </order>
+  <transform>
+    <name>Load DIM_COUNTRY</name>
+    <type>InsertUpdate</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <commit>100</commit>
+    <connection>aid_dw</connection>
+    <lookup>
+      <key>
+        <condition>=</condition>
+        <field>iso3_code</field>
+        <name>iso3_code</name>
+      </key>
+      <schema>aid_dw</schema>
+      <table>DIM_COUNTRY</table>
+      <value>
+        <name>iso3_code</name>
+        <rename>iso3_code</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>country_name</name>
+        <rename>country_name</rename>
+        <update>Y</update>
+      </value>
+      <value>
+        <name>country_group</name>
+        <rename>country_group</rename>
+        <update>Y</update>
+      </value>
+    </lookup>
+    <update_bypassed>N</update_bypassed>
+    <attributes/>
+    <GUI>
+      <xloc>496</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform>
+    <name>Read country mapping</name>
+    <type>TableInput</type>
+    <description/>
+    <distribute>Y</distribute>
+    <custom_distribution/>
+    <copies>1</copies>
+    <partitioning>
+      <method>none</method>
+      <schema_name/>
+    </partitioning>
+    <connection>aid_staging</connection>
+    <execute_each_row>N</execute_each_row>
+    <limit>0</limit>
+    <sql>SELECT iso3_code, country_name, country_group
+FROM stg_country_mapping
+ORDER BY iso3_code</sql>
+    <variables_active>N</variables_active>
+    <attributes/>
+    <GUI>
+      <xloc>304</xloc>
+      <yloc>304</yloc>
+    </GUI>
+  </transform>
+  <transform_error_handling>
+  </transform_error_handling>
+  <attributes/>
+</pipeline>
