@@ -1,0 +1,104 @@
+<Schema name="AID_DW">
+  <Dimension type="StandardDimension" visible="true" name="Country">
+    <Hierarchy name="Country Hierarchy" visible="true" hasAll="true" allMemberName="All Countries" primaryKey="country_key">
+      <Table name="DIM_COUNTRY">
+      </Table>
+      <Level name="Country Group" visible="true" column="country_group" type="String" uniqueMembers="true" levelType="Regular">
+      </Level>
+      <Level name="Country" visible="true" column="country_name" type="String" uniqueMembers="true" levelType="Regular">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Dimension type="StandardDimension" visible="true" name="Time">
+    <Hierarchy name="Time Hierarchy" visible="true" hasAll="true" allMemberName="All Years" primaryKey="time_key">
+      <Table name="DIM_TIME">
+      </Table>
+      <Level name="Decade" visible="true" column="decade" type="Integer" uniqueMembers="true" levelType="Regular">
+      </Level>
+      <Level name="Year" visible="true" column="year" type="Integer" uniqueMembers="true" levelType="Regular">
+      </Level>
+    </Hierarchy>
+  </Dimension>
+  <Cube name="Economy" visible="true" cache="true" enabled="true">
+    <Table name="FACT_ECONOMY">
+    </Table>
+    <DimensionUsage source="Country" name="Country" visible="true" foreignKey="country_key">
+    </DimensionUsage>
+    <DimensionUsage source="Time" name="Time" visible="true" foreignKey="time_key">
+    </DimensionUsage>
+    <Measure name="GDP per capita" column="gdp_per_capita" datatype="Numeric" formatString="#,##0" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="GDP" column="gdp" datatype="Numeric" formatString="#,##0" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="GDP growth pct" column="gdp_growth_pct" datatype="Numeric" formatString="#,##0.00" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="Exports pct GDP" column="exports_pct_gdp" datatype="Numeric" formatString="#,##0.00" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="Imports pct GDP" column="imports_pct_gdp" datatype="Numeric" formatString="#,##0.00" aggregator="avg" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Society" visible="true" cache="true" enabled="true">
+    <Table name="FACT_SOCIETY">
+    </Table>
+    <DimensionUsage source="Country" name="Country" visible="true" foreignKey="country_key">
+    </DimensionUsage>
+    <DimensionUsage source="Time" name="Time" visible="true" foreignKey="time_key">
+    </DimensionUsage>
+    <Measure name="Population thousands" column="population" datatype="Numeric" formatString="#,##0" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="GNI per capita" column="gni_per_capita" datatype="Numeric" formatString="#,##0" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="Life expectancy" column="life_expectancy" datatype="Numeric" formatString="#,##0.0" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="Urban pop pct" column="urban_pop_pct" datatype="Numeric" formatString="#,##0.00" aggregator="avg" visible="true">
+    </Measure>
+  </Cube>
+  <Cube name="Sector" visible="true" cache="true" enabled="true">
+    <Table name="FACT_SECTOR">
+    </Table>
+    <DimensionUsage source="Country" name="Country" visible="true" foreignKey="country_key">
+    </DimensionUsage>
+    <DimensionUsage source="Time" name="Time" visible="true" foreignKey="time_key">
+    </DimensionUsage>
+    <Dimension type="StandardDimension" visible="true" foreignKey="sector_key" name="Sector">
+      <Hierarchy name="Sector Hierarchy" visible="true" hasAll="true" allMemberName="All Sectors" primaryKey="sector_key">
+        <Table name="DIM_SECTOR">
+        </Table>
+        <Level name="Broad Sector" visible="true" column="broad_sector" type="String" uniqueMembers="true" levelType="Regular">
+        </Level>
+        <Level name="Sector" visible="true" column="sector_name" type="String" uniqueMembers="true" levelType="Regular">
+        </Level>
+      </Hierarchy>
+    </Dimension>
+    <Measure name="Value added pct GDP" column="value_added_pct_gdp" datatype="Numeric" formatString="#,##0.00" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="Value added USD" column="value_added_usd" datatype="Numeric" formatString="#,##0" aggregator="avg" visible="true">
+    </Measure>
+    <Measure name="Employment pct" column="employment_pct" datatype="Numeric" formatString="#,##0.00" aggregator="avg" visible="true">
+    </Measure>
+  </Cube>
+  <VirtualCube name="Development" visible="true" enabled="true">
+    <VirtualCubeDimension name="Country">
+    </VirtualCubeDimension>
+    <VirtualCubeDimension name="Time">
+    </VirtualCubeDimension>
+    <VirtualCubeMeasure cubeName="Economy" name="[Measures].[GDP per capita]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Economy" name="[Measures].[GDP]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Economy" name="[Measures].[GDP growth pct]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Economy" name="[Measures].[Exports pct GDP]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Economy" name="[Measures].[Imports pct GDP]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Society" name="[Measures].[Population thousands]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Society" name="[Measures].[GNI per capita]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Society" name="[Measures].[Life expectancy]" visible="true">
+    </VirtualCubeMeasure>
+    <VirtualCubeMeasure cubeName="Society" name="[Measures].[Urban pop pct]" visible="true">
+    </VirtualCubeMeasure>
+  </VirtualCube>
+</Schema>
